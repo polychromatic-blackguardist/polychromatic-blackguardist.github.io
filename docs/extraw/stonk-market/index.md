@@ -1,3 +1,13 @@
+---
+layout: post
+tags:
+  - WIP
+  - extra
+  - writeup
+  - picoctf
+  - reverse-engineering
+---
+
 # Stonk Market (WIP)
 
 [Original Challenge *(requires login)*](https://play.picoctf.org/practice/challenge/164)

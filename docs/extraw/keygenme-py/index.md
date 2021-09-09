@@ -1,3 +1,12 @@
+---
+layout: post
+tags:
+  - extra
+  - writeup
+  - picoctf
+  - reverse-engineering
+---
+
 # keygenme-py
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/121)

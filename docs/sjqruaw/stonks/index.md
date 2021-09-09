@@ -1,3 +1,12 @@
+---
+layout: post
+tags:
+  - sjqr:ua
+  - writeup
+  - picoctf
+  - binary-exploitation
+---
+
 # PicoCTF: Stonks
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/105)

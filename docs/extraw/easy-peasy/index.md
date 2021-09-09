@@ -1,3 +1,12 @@
+---
+layout: post
+tags:
+  - extra
+  - writeup
+  - picoctf
+  - cryptography
+---
+
 # Easy Peasy
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/125)

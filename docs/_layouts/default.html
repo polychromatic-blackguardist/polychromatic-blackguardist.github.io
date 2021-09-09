@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
-    <meta name="robots" content="noindex">
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <meta name="robots" content="none">
+    <meta name="referrer" content="no-referrer">
+
+    <meta name="description" content="{{ site.description | default: site.github.project_tagline }}">
+    {% if post.author %}
+      <meta name="author" content="{{ post.author }}">
+    {% elsif site.author %}
+      <meta name="author" content="{{ site.author }}">
+    {% endif %}
     <meta name="theme-color" content="#151515">
     <meta name="msapplication-navbutton-color" content="#151515">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
 
   <body>
