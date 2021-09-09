@@ -1,5 +1,3 @@
-# WORK IN PROGRESS
-
 ## Cache Me Outside
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/146)
@@ -46,8 +44,9 @@ Corrupt a heap data structure, with our one permitted byte, such that the last `
 Conveniently, a copy of the `libc` they're using has been included, so we can pull that open in Ghidra too, and look at its heap manager.
 Unlike `heapedit`, though, `libc` will take a hot minute to analyze.
 Get some coffee.
-Or, for a bit of coding fun, write a script to brute-force it **against a copy running locally**.
-(Don't be a dick to PicoCTF's servers.)
+Or, if you already had some, try writing a [brute-forcer](./bf.py)!
+(Disclaimer: it doesn't really work.
+I never said I *finished* writing it.)
 
 Technically, because this binary isn't (as far as I can tell) relocated, you could *probably* also find the relevant pointers on the stack and edit them to print the flag, but I'm going to do this the intended way.
 That means we need to dig into how the heap works!
@@ -138,52 +137,32 @@ Because we're only writing a single `char`, we'll need to pick a specific byte t
 Your first instinct would probably be to just zero out the last byte.
 After all, we *know* the next `malloc` is pointing to `0x603890`, and there's a target buffer right before it at `0x603800`.
 But be careful:
-The new value for the byte we're writing is read in with `scanf`, which can be unpredictable around null bytes.
-In this case, of course, we have the exact right `libc`, so we can just test, but for the sake of practice let's see if there's another single byte we can change.
-Here's the list of chunks we can pick from:
+NULs and whitespace can be dangerous with `scanf`.
+Here, we can test it, because we have the exact `libc` that'll be used on the server, and we can figure out definitively that passing a NUL will in fact work.
+If it didn't, there are ways around it; you can, for example, change the third byte -- but in my experimentation, it was *way* less reliable.
 
-```
-gef➤  heap chunks
-Chunk(addr=0x6034a0, size=0x90, flags=PREV_INUSE)
-    [0x00000000006034a0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x603530, size=0x90, flags=PREV_INUSE)
-    [0x0000000000603530     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x6035c0, size=0x90, flags=PREV_INUSE)
-    [0x00000000006035c0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x603650, size=0x90, flags=PREV_INUSE)
-    [0x0000000000603650     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x6036e0, size=0x90, flags=PREV_INUSE)
-    [0x00000000006036e0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x603770, size=0x90, flags=PREV_INUSE)
-    [0x0000000000603770     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
-Chunk(addr=0x603800, size=0x90, flags=PREV_INUSE)
-    [0x0000000000603800     00 00 00 00 00 00 00 00 21 20 59 6f 75 72 20 66    ........! Your f]
-Chunk(addr=0x603890, size=0x90, flags=PREV_INUSE)
-    [0x0000000000603890     00 38 60 00 00 00 00 00 68 69 73 20 77 6f 6e 27    .8`.....his won']
-```
+So if we set the fourth byte to `00`, we should dump the flag!
 
-Replacing the first byte, which is `00` for all of them, won't help us much.
-Ditto for the second, which is always `60`.
-The third changes, and there is indeed an address that's only different from the bad one by the third byte: `0x6034a0`.
-
-...Wait, what?
-The last byte isn't `0x90`!
-Well, the thing here is that the last step doesn't actually print the uninitialized data.
-It prints _`0x10` bytes in_ to the uninitialized data:
-
-```c
-printed = (char *)malloc(0x80);
-puts(printed + 0x10);
-```
-
-So if we set our third byte to `34`, aka ASCII `4`, then we can be sure `scanf` won't cry *and* when we print the uninitialized data we'll get to see the whole contents of the string!
-
-At this point, you *could* finesse the calculation, e.g. with `x/4b 0x602088` to figure out the precise address to modify.
-I just started trying each of the eight possibilities -- four each direction -- and it was the third one I tried.
+At this point, you *could* finesse the offset calculation, e.g. with `x/4b 0x602088` to figure out the precise address to modify, then subtracting.
+I just started trying each of the eight possibilities -- four each direction -- and the third offset I tried got me the flag.
 
 ### Breaking heapedit
 
 All told, this one has a pretty simple solve script.
-Most of the work went into research, and there's very little that could be done automatically -- now that we have the numbers, it's just a matter of plugging them in.
+Most of the work went into research, and there's very little processing that needs to be done -- now that we have the numbers, it's just a matter of plugging them in:
 
-# BUT THEY DON'T WORK!! DUN DUN DUNNNNN
+```py
+cxn = # [tube to local process or server]
+cxn.recvrepeat(timeout=0.1)
+cxn.sendline(f'{offset}'.encode('utf-8'))
+cxn.recvrepeat(timeout=0.1)
+cxn.sendline(bytes([val]))
+print(cxn.recvrepeat(timeout=0.1))
+# => lag is: picoCTF{...}
+```
+
+And it works!
+It's a *little* shaky, but I've never had it fail more than twice in a row.
+
+As usual, [my solve script](./solve.py) has some extra stuff to connect locally or remotely, check expected flags, etc.
+Before long I'll have a neat little template with all my usual stuff.
