@@ -113,5 +113,66 @@ That'll make it easier to see the pointers.
 
 Let's start with the first.
 Note that `size` is in hex bytes, and we need decimal words.
-I just used my shell; run `echo $(( 0x250 / 4 ))` on any modern shell and it should work.
+I just used my shell; run `echo $(( 0x250 / 4 ))` on any modern shell and it should give you 148.
+So `x/148w 0x602010`, which gives us:
 
+...a lot.
+I'm not gonna paste it all.
+In short: We found an address!
+This blob of memory has `0x603890`, the first address in our Tcache.
+But where's the second, `0x603800`?
+As it turns out, that's linked *from the first*, rather than directly stored in the Tcache -- when glibc `free`s something into the Tcache, it overwrites the first few bytes with yet more metadata.
+Here, we can see the first 4 bytes are a pointer to the next chunk in that size of Tcache:
+
+```
+gef➤  x/2w 0x603890
+0x603890:	0x603800	0x0
+```
+
+That said, modifying that pointer won't really help us.
+Only one `malloc` happens, and it'll take the first item, so we need to change what that first item is.
+Thankfully, we now know the address we need to care about: `0x602088`, or in other words, the address of our first `malloc` minus `5144`.
+So we know our offset, now: Something close to `-1032`.
+Because we're only writing a single `char`, we'll need to pick a specific byte to overwrite.
+
+Your first instinct would probably be to just zero out the last byte.
+After all, we *know* the next `malloc` is pointing to `0x603890`, and there's a target buffer right before it at `0x603800`.
+But be careful:
+The new value for the byte we're writing is read in with `scanf`, which can be unpredictable around null bytes.
+In this case, of course, we have the exact right `libc`, so we can just test, but for the sake of practice let's see if there's another single byte we can change.
+Here's the list of chunks we can pick from:
+
+```
+gef➤  heap chunks
+Chunk(addr=0x6034a0, size=0x90, flags=PREV_INUSE)
+    [0x00000000006034a0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x603530, size=0x90, flags=PREV_INUSE)
+    [0x0000000000603530     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x6035c0, size=0x90, flags=PREV_INUSE)
+    [0x00000000006035c0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x603650, size=0x90, flags=PREV_INUSE)
+    [0x0000000000603650     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x6036e0, size=0x90, flags=PREV_INUSE)
+    [0x00000000006036e0     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x603770, size=0x90, flags=PREV_INUSE)
+    [0x0000000000603770     43 6f 6e 67 72 61 74 73 21 20 59 6f 75 72 20 66    Congrats! Your f]
+Chunk(addr=0x603800, size=0x90, flags=PREV_INUSE)
+    [0x0000000000603800     00 00 00 00 00 00 00 00 21 20 59 6f 75 72 20 66    ........! Your f]
+Chunk(addr=0x603890, size=0x90, flags=PREV_INUSE)
+    [0x0000000000603890     00 38 60 00 00 00 00 00 68 69 73 20 77 6f 6e 27    .8`.....his won']
+```
+
+Replacing the first byte, which is `00` for all of them, won't help us much.
+Ditto for the second, which is always `60`.
+The third changes, and there is indeed an address that's only different from the bad one by the third byte: `0x602490`.
+So if we set the third byte to `24`, aka `$`, then we can be sure `scanf` won't cry and the pointer still points to our target.
+
+At this point, you *could* finesse the calculation, e.g. with `x/4b 0x602088` to figure out the precise address to modify.
+I just started trying each of the eight possibilities -- four each direction -- and it was the third one I tried.
+
+### Breaking heapedit
+
+All told, this one has a pretty simple solve script.
+Most of the work went into research, and there's very little that could be done automatically -- now that we have the numbers, it's just a matter of plugging them in.
+
+# BUT THEY DON'T WORK!! DUN DUN DUNNNNN
