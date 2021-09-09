@@ -6,7 +6,6 @@ import sys
 import tempfile
 from typing import Union
 from pwn import *
-from pwnlib import flag
 
 
 def usage(err=None):
