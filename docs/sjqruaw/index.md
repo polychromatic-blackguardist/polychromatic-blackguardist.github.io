@@ -2,5 +2,5 @@
 
 For checking off.
 
-* [Stonks](./stonks)
-* [Cache me outside](./cache-me-outside)
+* [Stonks](./stonks/)
+* [Cache me outside](./cache-me-outside/)
