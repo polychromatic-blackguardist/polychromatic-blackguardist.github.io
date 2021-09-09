@@ -11,12 +11,12 @@ def usage(err=None):
     if err is not None:
         log.failure(f"error: {err}")
     log.failure("usage: one of\n")
-    log.failure("  crack.py local <heapedit> <ld.so> <libc> <flag>")
-    log.failure("  crack.py remote <host:str> <port:int>\n")
+    log.failure("  solve.py local <heapedit> <ld.so> <libc> <flag>")
+    log.failure("  solve.py remote <host:str> <port:int>\n")
     sys.exit(0 if err is None else -1)
 
 
-def setup(solve):
+def setup():
     if sys.argv[1] == 'local':
         if len(sys.argv) != 6:
             usage("wrong number of arguments")
@@ -84,4 +84,4 @@ def solve(cxn, expected=None):
 
 
 if __name__ == '__main__':
-    setup(solve)
+    setup()

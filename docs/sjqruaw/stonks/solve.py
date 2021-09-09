@@ -13,13 +13,13 @@ def usage(err=None):
         print(f"error: {err}")
     print(
         "usage: one of\n"
-        "  crack.py local <path to vuln.c> <path to flag file>"
-        "  crack.py remote <host:str> <port:int>\n"
+        "  solve.py local <path to vuln.c> <path to flag file>"
+        "  solve.py remote <host:str> <port:int>\n"
     )
     sys.exit(0 if err is None else -1)
 
 
-def setup(solve):
+def setup():
     if len(sys.argv) != 4:
         usage("not enough arguments")
     if sys.argv[1] == 'local':
@@ -108,4 +108,4 @@ def solve(cxn: Union[process, remote], platform_data, expected=None):
 
 
 if __name__ == '__main__':
-    setup(solve)
+    setup()
