@@ -118,7 +118,7 @@ In order, that:
 Which gets us our flag!
 It could also have been a "one-liner", but I chose to break it into small steps to make it easier to see, step by step, what was going on.
 
-My [actual solution](./crack.py) has some extra bits to be self-contained; as long as you have a C compiler on your system accessible as `cc` -- which, after installing any C compiler on a Linux system, you should -- it'll compile `vuln.c`, copy your flag file next to it, and run it, all on its own.
+My [actual solution](./solve.py) has some extra bits to be self-contained; as long as you have a C compiler on your system accessible as `cc` -- which, after installing any C compiler on a Linux system, you should -- it'll compile `vuln.c`, copy your flag file next to it, and run it, all on its own.
 It also of course includes the machinery to dump the stack on its own.
 It *also* includes some extra machinery to handle the differences between my local machine and the server, trim the flag at the first null, etc.
 But the bulk of the work, the actual reverse-engineering and exploitation, is what I've described in this post.
