@@ -18,5 +18,5 @@ The name's accurate; if you know a thing or two about one-time pads this *is* ea
 My [solve script](./solve.py) can run against both local and remote targets, as usual.
 
 > **Note**:
-> The PicoCTF servers are currently serving a defective `otp.py` which *does not* behave the same as the provided one, and according the challenge is 'unsolvable'.
-> (It can actually be solved, but why waste your time fixing PicoCTF's mistake?)
+> The PicoCTF servers are currently serving a defective `otp.py` which *does not* behave the same as the provided one, and accordingly the challenge is 'unsolvable'.
+> (It can actually be worked around, but that's not really a fair part of the challenge, so I'm not including it here.)
