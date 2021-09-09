@@ -14,7 +14,7 @@ It doesn't look *that* good, but with a bit of massaging, the overall program fl
 - `free` the last of the 7 copies
 - `free` the bad buffer
 - Allow the user to edit a single byte, relative to the first target
-- `malloc` another buffer, then print the uninitialized data inside
+- `malloc` another buffer, then print the uninitialized data inside, starting `0x10` bytes in.
 
 All of the `malloc`s are the same size, `0x80` bytes.
 
@@ -164,8 +164,19 @@ Chunk(addr=0x603890, size=0x90, flags=PREV_INUSE)
 
 Replacing the first byte, which is `00` for all of them, won't help us much.
 Ditto for the second, which is always `60`.
-The third changes, and there is indeed an address that's only different from the bad one by the third byte: `0x602490`.
-So if we set the third byte to `24`, aka `$`, then we can be sure `scanf` won't cry and the pointer still points to our target.
+The third changes, and there is indeed an address that's only different from the bad one by the third byte: `0x6034a0`.
+
+...Wait, what?
+The last byte isn't `0x90`!
+Well, the thing here is that the last step doesn't actually print the uninitialized data.
+It prints _`0x10` bytes in_ to the uninitialized data:
+
+```c
+printed = (char *)malloc(0x80);
+puts(printed + 0x10);
+```
+
+So if we set our third byte to `34`, aka ASCII `4`, then we can be sure `scanf` won't cry *and* when we print the uninitialized data we'll get to see the whole contents of the string!
 
 At this point, you *could* finesse the calculation, e.g. with `x/4b 0x602088` to figure out the precise address to modify.
 I just started trying each of the eight possibilities -- four each direction -- and it was the third one I tried.
