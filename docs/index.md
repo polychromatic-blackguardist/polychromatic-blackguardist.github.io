@@ -1,6 +1,6 @@
-# Welcome to Chimeric Dream
+# Welcome to Polychromatic Blackguardist
 
-A chaotic mishmash of eclectic snippets of reality.
+(Don't worry: here, my obloquy is bleached, so you can read this site at work.)
 
 You may be here for:
 
