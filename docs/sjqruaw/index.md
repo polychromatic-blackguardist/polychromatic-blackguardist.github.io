@@ -1,6 +1,6 @@
-## SJQR:UA Writeups
+# SJQR:UA Writeups
 
-For checking off.
+Gotta get that SJQR:UA.
 
 * [Stonks](./stonks/)
 * [Cache me outside](./cache-me-outside/)

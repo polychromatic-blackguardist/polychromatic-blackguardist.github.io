@@ -1,8 +1,8 @@
-## PicoCTF: Stonks
+# PicoCTF: Stonks
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/105)
 
-### Finding the vulnerability
+## Finding the vulnerability
 
 I knew going into this that the vulnerability would be a `printf` format string-related one, which is pretty familiar territory for me.
 When I set up my environment for the challenge, this was confirmed:
@@ -56,7 +56,7 @@ cyclic_gen(string.digits).get(128)
 
 Notice I picked `string.digits`: I'm gonna be looking at hex, and the byte value for each digit is just `0x30` plus that digit, which makes it easier to read.
 
-### Testing and building
+## Testing and building
 
 So now we build a format string.
 I'm going to be using `%lx`, printing out `long`s as hex, and I'm gonna use 20, separated by `.`.
@@ -75,7 +75,7 @@ Buying stonks with token:
 
 And we see, starting at 'argument' 12, our de Bruijn sequence: `3030303130303030` is `00010000`, which is the first eight bytes backwards.
 
-### Cleaning it up
+## Cleaning it up
 
 Now that we have our offsets, we can use a less brute-force approach and target the exact indices we actually want:
 

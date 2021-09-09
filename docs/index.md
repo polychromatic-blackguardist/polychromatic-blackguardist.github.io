@@ -1,6 +1,6 @@
-## Welcome to Chimeric Dream
+# Welcome to Chimeric Dream
 
-A confusing mishmash of eclectic snippets of reality.
+A chaotic mishmash of eclectic snippets of reality.
 
 You may be here for:
 

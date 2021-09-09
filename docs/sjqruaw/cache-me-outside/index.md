@@ -1,4 +1,4 @@
-## Cache Me Outside
+# Cache Me Outside
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/146)
 
@@ -16,7 +16,7 @@ It doesn't look *that* good, but with a bit of massaging, the overall program fl
 
 All of the `malloc`s are the same size, `0x80` bytes.
 
-### Running heapedit
+## Running heapedit
 
 Now, interestingly, it doesn't seem like it's supposed to segfault, because the one on the server doesn't.
 It obviously has bad memory hygiene, but something in my local copy is out-and-out *broken*, in a way it took me a while to figure out.
@@ -37,7 +37,7 @@ Once you have everything, you can either:
 I did the latter.
 It makes running with GDB easier.
 
-### Explaining heapedit
+## Explaining heapedit
 
 So the attack we're meant to use is pretty clear:
 Corrupt a heap data structure, with our one permitted byte, such that the last `malloc` will sit in the same spot as one of the target buffers.
@@ -67,7 +67,7 @@ The Tcache also breaks the second-easiest way.
 We could theoretically just edit the size, so even though it's considered 'free' it isn't big enough to hold the 0x80 bytes that are requested.
 Unfortunately, though, Tcache bins store the size with the bin itself, so even though the chunk says it's `0x30` bytes long, it'll still get provided when the Tcache is asked for a `0x80`-byte chunk.
 
-### Investigating heapedit
+## Investigating heapedit
 
 So we instead have to find and edit the Tcache.
 Luckily, Tcache data is itself stored on the heap, which means we should be able to index off the first target malloc to get to it.
@@ -146,7 +146,7 @@ So if we set the fourth byte to `00`, we should dump the flag!
 At this point, you *could* finesse the offset calculation, e.g. with `x/4b 0x602088` to figure out the precise address to modify, then subtracting.
 I just started trying each of the eight possibilities -- four each direction -- and the third offset I tried got me the flag.
 
-### Breaking heapedit
+## Breaking heapedit
 
 All told, this one has a pretty simple solve script.
 Most of the work went into research, and there's very little processing that needs to be done -- now that we have the numbers, it's just a matter of plugging them in:
