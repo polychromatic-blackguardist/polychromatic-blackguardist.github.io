@@ -98,7 +98,7 @@ def solve(cxn: Union[process, remote], platform_data, expected=None):
 
     if expected is not None:
         if flag_bytes == expected:
-            log.info("Got expected flag!")
+            log.success("Got expected flag!")
         elif flag_bytes in expected:
             log.failure(f"Partial flag: {flag_bytes!r}")
         else:
