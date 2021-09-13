@@ -27,5 +27,8 @@ The name's accurate; if you know a thing or two about one-time pads this *is* ea
 My [solve script](./solve.py) can run against both local and remote targets, as usual.
 
 > **Note**:
-> The PicoCTF servers are currently serving a defective `otp.py` which *does not* behave the same as the provided one, and accordingly the challenge is 'unsolvable'.
-> (It can actually be worked around, but that's not really a fair part of the challenge, so I'm not including it here.)
+> The PicoCTF servers are currently serving a defective version of the challenge.
+> TL;DR: The `key` file is the wrong size, due to an error in generation, so incorrect key data is being used to OTP things.
+> The bug's been reported, it should be fixed soon.
+> Depending on how exactly you 'phrased' your solution it might not be an issue, but if you try to do like I did and grab *all* the key data, then grab from that the key data used for the flag, it won't work properly.
+> A currently functional solve script is available [here](./solve2.py), which feeds enough data to advance the key material position back to the beginning, retrieves exactly enough bytes, and does the same XOR trick to get the key material, then the flag.
