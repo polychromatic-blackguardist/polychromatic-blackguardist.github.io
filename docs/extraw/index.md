@@ -6,3 +6,4 @@ These were just for fun.
 * [Easy Peasy](./easy-peasy/)
 * [haySTACK](./haystack/)
 * [Hurry up! Wait!](./hurry-up-wait/)
+* [not crypto](./not-crypto/)
