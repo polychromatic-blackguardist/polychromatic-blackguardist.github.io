@@ -16,16 +16,14 @@ To quote their site, with a bit of added emphasis, CSAW is
 
 > [d]esigned as an entry-level, jeopardy-style CTF, this competition is for students who are trying to break into the field of security, as well as for advanced students and **industry professionals who want to practice their skills**. 
 
-Well, well, well, if that isn't me to a T.
+Well, well, well, if that one cherrypicked bit isn't me to a T.
 So I 'competed' with a few coworkers, and we did alright -- mostly, we wanted to practice binary exploitation, and while I broke a couple of web challenges, they weren't really the point.
 
 haySTACK was a fairly simple challenge.
 The name implied to me that it'd be a stack overflow of some kind.
 Popping it open in Ghidra, we see... a bit of a mess.
 As it turns out, there's a _tremendously_ huge array allocated on the stack, which is how I learned that there's an upper size limit to Ghidra's stack analysis.
-Still, it's not too hard to read once you poke at the assembly a little and see something like this:
-
-![TODO: image]()
+Still, it's not too hard to read once you poke at the assembly a little and see the stack manipulation operations.
 
 That massive buffer is initialized as an `int` array, with each value being `0xb00`, then one value is randomly selected and has the value `1337` written to it.
 Our goal is to find that `1337` in the sea of `0xb00`s.
@@ -73,4 +71,4 @@ try_code(cxn_sock, rand());
 
 (Note that the time is gotten when the connection is open, and one connection is used -- the program `srand(time(NULL))`s when it starts, so you want to make sure your `srand`s are based on approximately the same time.)
 
-Given the name, I think the buffer overflow is the intended solution, but this is still a very cool one.
+Given the name, I think the buffer overflow is the intended solution, but this is still a very cool trick to get it.
