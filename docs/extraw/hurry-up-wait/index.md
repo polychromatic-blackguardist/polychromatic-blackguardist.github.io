@@ -5,9 +5,8 @@ tags:
   - writeup
   - picoctf
   - reverse-engineering
+title: Hurry up! Wait!
 ---
-
-# Hurry up! Wait!
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/165)
 

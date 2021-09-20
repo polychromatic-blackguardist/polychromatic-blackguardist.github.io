@@ -6,9 +6,8 @@ tags:
   - writeup
   - picoctf
   - reverse-engineering
+title: Stonk Market (WIP)
 ---
-
-# Stonk Market (WIP)
 
 [Original Challenge *(requires login)*](https://play.picoctf.org/practice/challenge/164)
 

@@ -6,9 +6,8 @@ tags:
   - writeup
   - csaw
   - binary-exploitation
+title: haySTACK
 ---
-
-# haySTACK (WIP)
 
 [Original challenge *(requires login; may be expired)*](https://ctf.csaw.io/challenges#haySTACK-29)
 

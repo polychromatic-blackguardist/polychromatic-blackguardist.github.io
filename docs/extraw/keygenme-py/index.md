@@ -5,9 +5,8 @@ tags:
   - writeup
   - picoctf
   - reverse-engineering
+title: keygenme-py
 ---
-
-# keygenme-py
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/121)
 

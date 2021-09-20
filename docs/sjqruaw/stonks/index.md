@@ -5,9 +5,8 @@ tags:
   - writeup
   - picoctf
   - binary-exploitation
+title: Stonks
 ---
-
-# PicoCTF: Stonks
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/105)
 

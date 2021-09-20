@@ -5,9 +5,8 @@ tags:
   - writeup
   - picoctf
   - binary-exploitation
+title: Cache Me Outside
 ---
-
-# Cache Me Outside
 
 [Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/146)
 
