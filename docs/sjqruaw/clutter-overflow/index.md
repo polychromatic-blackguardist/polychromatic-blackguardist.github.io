@@ -67,11 +67,11 @@ Okay, so clearly we've done something wrong.
 The first hint is that the buffer is 0x100 bytes, which is 256 in decimal -- larger than our attempted overflow size.
 So what did we do wrong?
 
-Well, the thing is, I lied a little.
+Well, the thing is, I made a mistake.
 See, the `code ==` line is interpreting the stack value it finds as an *int*, and on the x86 CPUs this program targets, numbers are stored in **little** endian, but we decoded it as big-endian.
 That's the `'big'` in the Python code.
 
-Mismatched [endianness] is a really common issue in pwn challenges, especially since the English, left-to-right order that integers are printed in maps most cleanly to big-endian.
+Mismatched [endianness](https://en.wikipedia.org/wiki/Endianness) is a really common issue in pwn challenges, especially since the English, left-to-right order that integers are printed in maps most cleanly to big-endian.
 In this case, the fix is quite easy:
 Just reverse the string we're finding in the cyclic sequence.
 (You can also re-run the `to_bytes` line with `'little'` instead.)
