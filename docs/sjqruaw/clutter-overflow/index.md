@@ -1,3 +1,16 @@
+---
+layout: post
+tags:
+  - sjqr:ua
+  - writeup
+  - picoctf
+  - binary-exploitation
+title: Clutter Overflow
+---
+
+
+[Original challenge *(requires login)*](https://play.picoctf.org/practice/challenge/216)
+
 Looking at the code, we can immediately see an issue:
 
 ```c
