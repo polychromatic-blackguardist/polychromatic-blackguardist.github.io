@@ -87,5 +87,5 @@ tube.interactive()
 Locally, that errors out because the challenge tries to `cat flag.txt`, which doesn't exist.
 But remotely, it works just fine, and delivers us a flag.
 
-My [solve script] is a little uglier than usual, since I'm not on my usual machine.
+My [solve script](./solve.py) is a little uglier than usual, since I'm not on my usual machine.
 But it still works fine, as long as you call it exactly right.
